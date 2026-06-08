@@ -39,7 +39,7 @@ const kbStyles = {
   }),
   grid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 400px))',
+    gridTemplateColumns: 'repeat(3, minmax(0, 400px))',
     justifyContent: 'center',
     gap: 'var(--space-5)'
   },
@@ -180,8 +180,43 @@ const kbStyles = {
     color: 'var(--graphite-400)',
     maxWidth: 420,
     lineHeight: 'var(--leading-body)'
+  },
+  pager: {
+    marginTop: 'var(--space-8)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 'var(--space-4)'
+  },
+  pagerBtn: (disabled) => ({
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 7,
+    fontFamily: 'var(--font-label)',
+    fontWeight: 'var(--weight-medium)',
+    fontSize: '0.75rem',
+    letterSpacing: 'var(--tracking-label)',
+    textTransform: 'uppercase',
+    color: disabled ? 'var(--graphite-500)' : 'var(--graphite-300)',
+    background: 'transparent',
+    border: '1px solid ' + (disabled ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.14)'),
+    borderRadius: 'var(--radius-pill)',
+    padding: '9px 16px',
+    cursor: disabled ? 'default' : 'pointer',
+    opacity: disabled ? 0.5 : 1,
+    transition: 'all var(--dur-fast) var(--ease-standard)'
+  }),
+  pagerLabel: {
+    fontFamily: 'var(--font-sans)',
+    fontSize: 'var(--fs-caption)',
+    color: 'var(--graphite-400)',
+    letterSpacing: '0.02em',
+    minWidth: 96,
+    textAlign: 'center'
   }
 };
+
+const PAGE_SIZE = 9; // 3 rows × 3 columns
 
 /* ── Format icons ──────────────────────────────────────────────── */
 function FormatIcon({ format }) {
@@ -291,10 +326,43 @@ function EmptyState() {
   );
 }
 
+function PagerArrow({ dir }) {
+  return React.createElement('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+    dir === 'prev'
+      ? React.createElement('path', { d: 'M19 12H5M11 18l-6-6 6-6' })
+      : React.createElement('path', { d: 'M5 12h14M13 6l6 6-6 6' })
+  );
+}
+
+function Pager({ page, totalPages, onPrev, onNext }) {
+  const atStart = page <= 1;
+  const atEnd = page >= totalPages;
+  const hover = (e, on) => {
+    if (e.currentTarget.getAttribute('data-disabled') === 'true') return;
+    e.currentTarget.style.borderColor = on ? 'var(--flame-500)' : 'rgba(255,255,255,0.14)';
+    e.currentTarget.style.color = on ? 'var(--flame-400)' : 'var(--graphite-300)';
+  };
+  return React.createElement('div', { style: kbStyles.pager },
+    React.createElement('button', {
+      type: 'button', onClick: atStart ? undefined : onPrev, disabled: atStart,
+      'data-disabled': atStart ? 'true' : 'false',
+      style: kbStyles.pagerBtn(atStart),
+      onMouseEnter: (e) => hover(e, true), onMouseLeave: (e) => hover(e, false)
+    }, React.createElement(PagerArrow, { dir: 'prev' }), 'Prev'),
+    React.createElement('span', { style: kbStyles.pagerLabel }, 'Page ' + page + ' of ' + totalPages),
+    React.createElement('button', {
+      type: 'button', onClick: atEnd ? undefined : onNext, disabled: atEnd,
+      'data-disabled': atEnd ? 'true' : 'false',
+      style: kbStyles.pagerBtn(atEnd),
+      onMouseEnter: (e) => hover(e, true), onMouseLeave: (e) => hover(e, false)
+    }, 'Next', React.createElement(PagerArrow, { dir: 'next' }))
+  );
+}
+
 function KnowledgeBase() {
-  const { Button } = window.OnCourtDesignSystem_dbd40f;
   const [activeFilter, setActiveFilter] = React.useState('All');
   const [items, setItems] = React.useState([]);
+  const [page, setPage] = React.useState(1);
 
   React.useEffect(() => {
     let alive = true;
@@ -307,6 +375,20 @@ function KnowledgeBase() {
   const filtered = activeFilter === 'All'
     ? items
     : items.filter(a => a.category === activeFilter);
+
+  // Reset to first page whenever the filter changes or the result set shrinks.
+  React.useEffect(() => { setPage(1); }, [activeFilter]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+  const pageItems = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+  const goPage = (n) => {
+    setPage(n);
+    // Bring the grid back into view when paging.
+    const sec = document.getElementById('research');
+    if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   // Only surface categories that actually have material (plus "All").
   const present = new Set(items.map(i => i.category));
@@ -329,22 +411,19 @@ function KnowledgeBase() {
 
       // Grid or empty state
       items.length
-        ? React.createElement('div', { style: kbStyles.grid },
-            filtered.map((item) => React.createElement(ArticleCard, { key: item.id, item }))
+        ? React.createElement('div', { className: 'oc-research-grid', style: kbStyles.grid },
+            pageItems.map((item) => React.createElement(ArticleCard, { key: item.id, item }))
           )
         : React.createElement(EmptyState),
 
-      // Footer CTA — only when there is material to explore
-      items.length
-        ? React.createElement('div', { style: { marginTop: 'var(--space-8)', display: 'flex', justifyContent: 'center' } },
-            React.createElement(Button, {
-              variant: 'inverse',
-              size: 'lg',
-              iconRight: React.createElement('svg', { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
-                React.createElement('path', { d: 'M5 12h14M12 5l7 7-7 7' })
-              )
-            }, 'Explore All Research')
-          )
+      // Subtle pager — only when there is more than one page
+      items.length && totalPages > 1
+        ? React.createElement(Pager, {
+            page: safePage,
+            totalPages: totalPages,
+            onPrev: () => goPage(safePage - 1),
+            onNext: () => goPage(safePage + 1)
+          })
         : null
     )
   );

@@ -25,6 +25,14 @@
     .oc-burger { display: none; }
     .oc-mobile-menu { display: none !important; }
 
+    /* Research grid: 3 cols → 2 → 1 as the viewport narrows */
+    @media (max-width: 1180px) {
+      .oc-research-grid { grid-template-columns: repeat(2, minmax(0, 400px)) !important; }
+    }
+    @media (max-width: 800px) {
+      .oc-research-grid { grid-template-columns: minmax(0, 400px) !important; }
+    }
+
     @media (max-width: 720px) {
       /* Replace desktop nav with burger */
       .oc-nav-desktop { display: none !important; }
