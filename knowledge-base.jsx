@@ -39,7 +39,7 @@ const kbStyles = {
   }),
   grid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))',
     gap: 'var(--space-5)'
   },
   card: {
@@ -52,7 +52,8 @@ const kbStyles = {
     display: 'flex',
     flexDirection: 'column',
     gap: 'var(--space-4)',
-    textAlign: 'left'
+    textAlign: 'left',
+    minHeight: 260
   },
   cardHover: {
     transform: 'translateY(-2px)',
@@ -93,7 +94,11 @@ const kbStyles = {
     fontSize: 'var(--fs-h4)',
     lineHeight: 'var(--leading-snug)',
     color: 'var(--text-on-ink)',
-    letterSpacing: 'var(--tracking-tight)'
+    letterSpacing: 'var(--tracking-tight)',
+    display: '-webkit-box',
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden'
   },
   cardSummary: {
     fontFamily: 'var(--font-sans)',
@@ -251,7 +256,7 @@ function ArticleCard({ item }) {
       : null,
     React.createElement('div', { style: kbStyles.cardMeta },
       item.publisherLogo
-        ? React.createElement('img', { src: item.publisherLogo, alt: item.publisherName || 'Publisher', style: { height: 16, maxWidth: 56, objectFit: 'contain', borderRadius: 2, flexShrink: 0 } })
+        ? React.createElement('img', { src: item.publisherLogo, alt: item.publisherName || 'Publisher', style: { height: 32, maxWidth: 36, objectFit: 'contain', borderRadius: 4, flexShrink: 0 } })
         : item.publisherName
         ? React.createElement('span', null, item.publisherName)
         : null,
