@@ -39,7 +39,8 @@ const kbStyles = {
   }),
   grid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 400px))',
+    justifyContent: 'center',
     gap: 'var(--space-5)'
   },
   card: {
