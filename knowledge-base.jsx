@@ -250,6 +250,14 @@ function ArticleCard({ item }) {
         )
       : null,
     React.createElement('div', { style: kbStyles.cardMeta },
+      item.publisherLogo
+        ? React.createElement('img', { src: item.publisherLogo, alt: item.publisherName || 'Publisher', style: { height: 16, maxWidth: 56, objectFit: 'contain', borderRadius: 2, flexShrink: 0 } })
+        : item.publisherName
+        ? React.createElement('span', null, item.publisherName)
+        : null,
+      (item.publisherLogo || item.publisherName)
+        ? React.createElement('span', { style: kbStyles.dot })
+        : null,
       React.createElement('span', null, item.date),
       item.meta ? React.createElement('span', { style: kbStyles.dot }) : null,
       item.meta ? React.createElement('span', null, item.meta) : null,
