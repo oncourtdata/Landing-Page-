@@ -98,7 +98,10 @@ const kbStyles = {
     display: '-webkit-box',
     WebkitLineClamp: 2,
     WebkitBoxOrient: 'vertical',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    overflowWrap: 'anywhere',
+    wordBreak: 'break-word',
+    minWidth: 0
   },
   cardSummary: {
     fontFamily: 'var(--font-sans)',
@@ -255,17 +258,17 @@ function ArticleCard({ item }) {
         )
       : null,
     React.createElement('div', { style: kbStyles.cardMeta },
-      item.publisherLogo
-        ? React.createElement('img', { src: item.publisherLogo, alt: item.publisherName || 'Publisher', style: { height: 32, maxWidth: 36, objectFit: 'contain', borderRadius: 4, flexShrink: 0 } })
-        : item.publisherName
-        ? React.createElement('span', null, item.publisherName)
-        : null,
-      (item.publisherLogo || item.publisherName)
-        ? React.createElement('span', { style: kbStyles.dot })
-        : null,
       React.createElement('span', null, item.date),
       item.meta ? React.createElement('span', { style: kbStyles.dot }) : null,
       item.meta ? React.createElement('span', null, item.meta) : null,
+      (item.publisherLogo || item.publisherName)
+        ? React.createElement('span', { style: kbStyles.dot })
+        : null,
+      item.publisherLogo
+        ? React.createElement('img', { src: item.publisherLogo, alt: item.publisherName || 'Publisher', style: { height: 40, maxWidth: 64, objectFit: 'contain', borderRadius: 4, flexShrink: 0 } })
+        : item.publisherName
+        ? React.createElement('span', null, item.publisherName)
+        : null,
       React.createElement('span', { style: kbStyles.cardAction },
         fmt.verb,
         React.createElement(ActionArrowIcon)
