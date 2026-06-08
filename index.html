@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnCourt — Athlete Development, Redefined</title>
+
+  <!-- Design System tokens -->
+  <link rel="stylesheet" href="ds/tokens/fonts.css">
+  <link rel="stylesheet" href="ds/tokens/colors.css">
+  <link rel="stylesheet" href="ds/tokens/typography.css">
+  <link rel="stylesheet" href="ds/tokens/spacing.css">
+  <link rel="stylesheet" href="ds/tokens/base.css">
+  <link rel="stylesheet" href="ds/styles.css">
+
+  <style>
+    html { scroll-behavior: smooth; }
+
+    /* Hero entrance animations */
+    @keyframes heroFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(6px); }
+    }
+
+    @keyframes scrollDot {
+      0%   { cy: 8; opacity: 1; }
+      50%  { cy: 14; opacity: 0.4; }
+      100% { cy: 8; opacity: 1; }
+    }
+
+    /* Reel section animations (used by Services Reel) */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+    @keyframes growX { to { transform: scaleX(1); } }
+    @keyframes growY { to { transform: scaleY(1); } }
+    @keyframes scaleIn { from { transform: scale(0.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes cardIn { from { transform: scale(0.92) translateY(12px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+    /* Selection styling */
+    ::selection {
+      background: var(--flame-200);
+      color: var(--graphite-900);
+    }
+
+    /* ── Responsive layout ───────────────────────────────────── */
+    /* Burger / mobile drawer toggles */
+    .oc-burger { display: none; }
+    .oc-mobile-menu { display: none !important; }
+
+    /* Tablet */
+    @media (max-width: 900px) {
+      nav > div.oc-nav-desktop > div:last-child > a:last-child > svg + * { display: none !important; }
+    }
+
+    /* Mobile */
+    @media (max-width: 720px) {
+      /* Replace desktop nav with burger */
+      .oc-nav-desktop { display: none !important; }
+      .oc-burger { display: flex !important; }
+      .oc-mobile-menu.open { display: block !important; }
+
+      /* Mission quote marks: open mark above text, close mark below — no overlap */
+      .oc-quote-wrap { padding: 2.4rem 0 3.4rem !important; }
+      .oc-quote-open { font-size: 3rem !important; top: 0 !important; left: 0 !important; opacity: 0.5 !important; }
+      .oc-quote-close { display: block !important; font-size: 3rem !important; bottom: 0 !important; right: 0 !important; opacity: 0.5 !important; }
+
+      /* CoreIdea: stack columns */
+      section#about > div {
+        grid-template-columns: 1fr !important;
+      }
+
+      /* ServicesReel: stack stage; reduce padding */
+      section#services {
+        padding: clamp(28px, 6vw, 40px) clamp(20px, 4vw, 32px) !important;
+      }
+      section#services > div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+        gap: 24px !important;
+      }
+      section#services h2 {
+        font-size: clamp(2rem, 7vw, 2.75rem) !important;
+      }
+      section#services [style*="grid-template-columns: repeat(4"] {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+      section#services [style*="font-size: 480"] {
+        font-size: 240px !important;
+        right: -20px !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      section#services [style*="grid-template-columns: repeat(2"] {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- DS bundle -->
+  <script src="ds/_ds_bundle.js"></script>
+
+  <!-- Components -->
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="hero-particles.jsx"></script>
+  <script type="text/babel" src="ecosystem-visual.jsx"></script>
+  <script type="text/babel" src="services-reel.jsx"></script>
+  <script type="text/babel" src="app.jsx"></script>
+
+  <!-- Mount -->
+  <script type="text/babel">
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(window.OnCourtApp));
+  </script>
+</body>
+</html>

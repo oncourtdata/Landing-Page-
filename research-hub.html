@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnCourt — Research Hub</title>
+
+  <!-- Design System tokens -->
+  <link rel="stylesheet" href="ds/tokens/fonts.css">
+  <link rel="stylesheet" href="ds/tokens/colors.css">
+  <link rel="stylesheet" href="ds/tokens/typography.css">
+  <link rel="stylesheet" href="ds/tokens/spacing.css">
+  <link rel="stylesheet" href="ds/tokens/base.css">
+  <link rel="stylesheet" href="ds/styles.css">
+
+  <style>
+    html { scroll-behavior: smooth; }
+
+    ::selection {
+      background: var(--flame-200);
+      color: var(--graphite-900);
+    }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    .oc-burger { display: none; }
+    .oc-mobile-menu { display: none !important; }
+
+    @media (max-width: 720px) {
+      /* Replace desktop nav with burger */
+      .oc-nav-desktop { display: none !important; }
+      .oc-burger { display: flex !important; }
+      .oc-mobile-menu.open { display: block !important; }
+
+      /* Hero: stack contribute card under text */
+      section[id] > div[style*="grid-template-columns"],
+      body > div#root section > div[style*="grid-template-columns: 1fr auto"] {
+        grid-template-columns: 1fr !important;
+        gap: var(--space-6) !important;
+      }
+
+      /* Contribute card full width on mobile */
+      div[style*="width: 380"] {
+        width: 100% !important;
+        max-width: 480px !important;
+      }
+
+      /* Research category filters scroll horizontally */
+      section#research > div > div:first-child {
+        overflow-x: auto;
+        flex-wrap: nowrap !important;
+        padding-bottom: 8px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      nav > div.oc-nav-desktop > div:first-child {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- DS bundle -->
+  <script src="ds/_ds_bundle.js"></script>
+
+  <!-- Shared data layer (localStorage now; Supabase-swappable) -->
+  <script src="research-data.js"></script>
+
+  <!-- Components -->
+  <script type="text/babel" src="knowledge-base.jsx"></script>
+  <script type="text/babel" src="research-hub-app.jsx"></script>
+
+  <!-- Mount -->
+  <script type="text/babel">
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(window.ResearchHubApp));
+  </script>
+</body>
+</html>
