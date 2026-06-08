@@ -478,7 +478,7 @@ function ContributeCard() {
           React.createElement('line', { x1: '12', y1: '3', x2: '12', y2: '15' }),
           React.createElement('path', { d: 'M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4' })
         ),
-        onClick: () => window.location.href = 'mailto:contribute@oncourtdata.com?subject=Knowledge%20Contribution%20to%20OnCourt%20Research'
+        onClick: () => window.open('https://forms.gle/WJ6cm8SsjwbUtpCC6', '_blank', 'noopener,noreferrer')
       }, 'Submit a Contribution')
     )
   );
