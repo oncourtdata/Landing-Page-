@@ -1,5 +1,8 @@
 /* app.jsx — OnCourt landing page sections */
 
+/* Platform sign-in target (OnCourt platform, separate deploy on a subdomain). */
+var PLATFORM_URL = 'https://app.oncourtdata.com';
+
 /* ── Scroll reveal hook ────────────────────────────────────────── */
 function useScrollReveal(threshold = 0.15) {
   const ref = React.useRef(null);
@@ -137,7 +140,7 @@ function Nav() {
         }, React.createElement(CalendarIcon)),
         // Control Panel Sign-In
         React.createElement('a', {
-          href: '#', 'aria-label': 'Control Panel Sign-In',
+          href: PLATFORM_URL, target: '_blank', rel: 'noopener noreferrer', 'aria-label': 'Control Panel Sign-In',
           style: {
             height: 36, borderRadius: 18,
             border: '1px solid rgba(255,255,255,0.25)', background: 'transparent', color: 'var(--bone-200)',
@@ -241,7 +244,7 @@ function MobileMenu({ open, onClose, links }) {
           style: { ...rowBase, border: '1px solid rgba(255,255,255,0.2)', color: 'var(--bone-100)' }
         }, React.createElement(CalendarIcon), 'Book a Consultation'),
         React.createElement('a', {
-          href: '#', onClick: onClose,
+          href: PLATFORM_URL, target: '_blank', rel: 'noopener noreferrer', onClick: onClose,
           style: { ...rowBase, border: '1px solid rgba(255,255,255,0.2)', color: 'var(--bone-100)' }
         },
           React.createElement('svg', { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round' },
